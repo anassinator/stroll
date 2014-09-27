@@ -19,6 +19,7 @@ public class Vibration{
 	}
 	
 	public void start(){
+		cancel();
 		myMyo.vibrate(Myo.VibrationType.SHORT);
 		loop();
 	}
@@ -28,8 +29,12 @@ public class Vibration{
 		vibrationTask.cancel();
 		}
 	}
+	public void start(long time){
+		setPeriod(time);
+		start();
+	}
 	public void setPeriod(long time){
-		period = time;
+		period = Math.abs(time);
 	}
 
 	class VibrationTask extends TimerTask{
