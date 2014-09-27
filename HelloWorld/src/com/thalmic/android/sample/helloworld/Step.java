@@ -51,7 +51,7 @@ public class Step {
 			String maneuver_text = json.getString("maneuver");
 			return new Maneuver(maneuver_text);
 		} catch (JSONException e) {
-			return new Maneuver("");
+			return new Maneuver("keep-going");
 		}
 	}
 	

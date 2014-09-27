@@ -31,6 +31,8 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class HelloWorldActivity extends Activity implements LocationListener{
 
     // This code will be returned in onActivityResult() when the enable Bluetooth activity exits.
@@ -43,14 +45,17 @@ public class HelloWorldActivity extends Activity implements LocationListener{
     private float yaw;
     private double latitude;
     private double longitude;
-    
+    private int current_step = 0;
+    private LatLng current_location;
+    private Route route;
+
     LocationManager locationManager ;
     String provider;
 
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
     private DeviceListener mListener = new AbstractDeviceListener() {
-    	
+
         private Arm mArm = Arm.UNKNOWN;
         private XDirection mXDirection = XDirection.UNKNOWN;
 
@@ -61,6 +66,11 @@ public class HelloWorldActivity extends Activity implements LocationListener{
             mTextView.setTextColor(Color.CYAN);
             vibration = new Vibration(myo);
             vibration.start();
+            new RequestBuilder().execute("La Commune Montreal", "McGill University");
+            while (RequestBuilder.Directions == null);
+            vibration.cancel();
+            route = new RequestHandler(RequestBuilder.Directions).routes[0];
+            RequestBuilder.ResetDirections();
         }
 
         // onDisconnect() is called whenever a Myo has been disconnected.
@@ -112,7 +122,7 @@ public class HelloWorldActivity extends Activity implements LocationListener{
             mTextView.setRotation(0);
             mTextView.setRotationX(0);
             mTextView.setRotationY(0);
-            vibration.setPeriod(100+10*(int)Math.abs(yaw));
+        	LocationHandler.update_orientation(rotation);
             mTextView.setText(Float.toString(yaw));
         }
 
@@ -121,40 +131,13 @@ public class HelloWorldActivity extends Activity implements LocationListener{
         public void onPose(Myo myo, long timestamp, Pose pose) {
             // Handle the cases of the Pose enumeration, and change the text of the text view
             // based on the pose we receive.
-            switch (pose) {
-            /*
-                case UNKNOWN:
-                    mTextView.setText(getString(R.string.hello_world));
-                    break;
-                case REST:
-                    int restTextId = R.string.hello_world;
-                    switch (mArm) {
-                        case LEFT:
-                            restTextId = R.string.arm_left;
-                            break;
-                        case RIGHT:
-                            restTextId = R.string.arm_right;
-                            break;
-                    }
-                    mTextView.setText(getString(restTextId));
-                    break;
-                case FIST:
-                	mTextView.setText(getString(R.string.pose_fist));
-                    break;
-                case WAVE_IN:
-                    mTextView.setText(getString(R.string.pose_wavein));
-                    break;
-                case WAVE_OUT:
-                    mTextView.setText(getString(R.string.pose_waveout));
-                    break;
-                case FINGERS_SPREAD:
-                    mTextView.setText(getString(R.string.pose_fingersspread));
-                    break;
-                case THUMB_TO_PINKY:
-                    mTextView.setText(getString(R.string.pose_thumbtopinky));
-                    break;
-                    */
-            }
+        	switch (pose) {
+        		case FIST:
+        			LocationHandler.search(route.steps[current_step]);
+        			break;
+        		default:
+        			break;
+        	}
         }
     };
 
@@ -261,6 +244,12 @@ public class HelloWorldActivity extends Activity implements LocationListener{
     public void onLocationChanged(Location location) {
     	longitude = location.getLongitude();
     	latitude = location.getLatitude();
+    	current_location = new LatLng(longitude, latitude);
+    	if (route != null) {
+	    	if (LocationHandler.update_location(current_location, route.steps[current_step].end_location)) {
+	    		current_step++;
+	    	}
+    	}
     	//mTextView.setText(Double.toString(longitude)+":"+Double.toString(latitude));
     	
     }

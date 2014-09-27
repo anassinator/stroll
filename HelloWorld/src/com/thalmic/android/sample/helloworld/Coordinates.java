@@ -6,8 +6,6 @@ public class Coordinates {
 	public static double distance;
 	public static double bearing; 
 	
-	
-	
 	public static void update(LatLng latLng1, LatLng latLng2) {
 	    double earthRadius = 6371; //kilometers
 	    double dLat = Math.toRadians(latLng2.latitude-latLng1.latitude);
@@ -25,9 +23,9 @@ public class Coordinates {
 		double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLong);
 		double result = Math.toDegrees(Math.atan2(y, x));
 		bearing = (result + 360.0) % 360.0;
-		}
-	public static void main(String [ ] args)
-	{
+	}
+
+	public static void main(String [ ] args) {
 		LatLng latLng1 = new LatLng(50.066388889,5.731388889);
 		LatLng latLng2 = new LatLng(58.643888889,3.07);
 		update(latLng1,latLng2);
