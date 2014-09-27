@@ -3,8 +3,8 @@ package com.thalmic.android.sample.helloworld;
 import org.json.*;
 
 public class RequestHandler {
-    public Route[] routes;
-    public JSONObject json;
+    private JSONObject json;
+	public Route[] routes;
 
     public RequestHandler(JSONObject json) {
         this.json = json;
@@ -41,9 +41,7 @@ public class RequestHandler {
 	        
 	        return new Route(steps);
     	} catch (JSONException e) {
-    		
+        	return null;
     	}
-    	
-    	return null;
     }
 }

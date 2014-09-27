@@ -20,5 +20,4 @@ public class Maneuver {
 			this.direction = Direction.FORWARD;
 		}
 	}
-	
 }
