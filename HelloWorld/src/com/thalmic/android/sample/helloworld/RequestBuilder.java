@@ -21,6 +21,8 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
     private static final String ORIGIN = "origin=";
     private static final String DEST = "destination=";
     private static final String KEY = "key=";
+    private static final String ALTROUTE = "alternatives";
+    private static final String TRUE = "true";
     private static final String DEPARTURE_TIME = "departure_time=";
     private static final String MODE = "mode=";
     private static final String WALK = "walking";
@@ -86,6 +88,7 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
         return RequestBuilder.HEADER + RequestBuilder.ORIGIN + origin + "&"
                 + RequestBuilder.DEST + destination + "&"
                 + RequestBuilder.KEY + RequestBuilder.API_KEY + "&"
+                + RequestBuilder.ALTROUTE + RequestBuilder.TRUE + "&"
                 + RequestBuilder.DEPARTURE_TIME + RequestBuilder.getCurrentTime() + "&"
                 + RequestBuilder.MODE + RequestBuilder.WALK;
     }
