@@ -1,13 +1,14 @@
 package com.thalmic.android.sample.helloworld;
 
 import org.json.*;
+import com.google.android.gms.maps.model.LatLng;
 
 public class Step {
 	private JSONObject json;
 	public int distance;
 	public int duration;
-	public Coordinate start_location;
-	public Coordinate end_location;
+	public LatLng start_location;
+	public LatLng end_location;
 	public Maneuver maneuver;
 	
 	public Step(JSONObject json) {
@@ -28,12 +29,12 @@ public class Step {
     	}
 	}
 	
-	private Coordinate parse_coordinates(String name) {
+	private LatLng parse_coordinates(String name) {
     	try {
 	        JSONObject json_obj = json.getJSONObject(name);
 	        double lat = json_obj.getDouble("lat");
 	        double lng = json_obj.getDouble("lng");
-	        return new Coordinate(lat, lng);
+	        return new LatLng(lat, lng);
     	} catch (JSONException e) {
         	return null;
     	}
