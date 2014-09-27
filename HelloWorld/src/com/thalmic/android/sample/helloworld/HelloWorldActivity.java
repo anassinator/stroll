@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,10 +65,14 @@ public class HelloWorldActivity extends Activity implements LocationListener{
         public void onConnect(Myo myo, long timestamp) {
             // Set the text color of the text view to cyan when a Myo connects.
             mTextView.setTextColor(Color.CYAN);
+            Log.w("debugger", "Wut");
             vibration = new Vibration(myo);
-            vibration.start();
+            // vibration.start();
+            Log.w("debugger", "Vibrate");
             new RequestBuilder().execute("La Commune Montreal", "McGill University");
+            Log.w("debugger", "Waiting...");
             while (RequestBuilder.Directions == null);
+            Log.w("debugger", "Yay!");
             vibration.cancel();
             route = new RequestHandler(RequestBuilder.Directions).routes[0];
             RequestBuilder.ResetDirections();

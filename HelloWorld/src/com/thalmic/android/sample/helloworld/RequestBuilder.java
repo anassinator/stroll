@@ -15,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.util.Log;
 
 public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
 	// API call parameter list
@@ -41,12 +42,15 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
     
     // Returns json string of direction api call results
     private String getDirectionString(String origin, String destination) {
+    	Log.w("debugger", "Initialized");
         HttpClient client = new DefaultHttpClient();
         HttpResponse response;
         
         try {
         	// Use http get to get directions
-            response = client.execute(new HttpGet(RequestBuilder.buildRequestURL(origin, destination)));
+        	String url = RequestBuilder.buildRequestURL(origin, destination);
+        	Log.w("debugger", url);
+            response = client.execute(new HttpGet(url));
             
             StatusLine status = response.getStatusLine();
             
@@ -112,6 +116,7 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
         if (place.length != 2)
             return null;
         
+        Log.w("debugger", "Starting...");
         // place[0] - origin
         // place[1] - destination
         return this.getDirections(place[0], place[1]);
