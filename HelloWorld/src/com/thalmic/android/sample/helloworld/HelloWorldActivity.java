@@ -15,6 +15,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.content.Context;
 
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
@@ -26,17 +31,26 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
-public class HelloWorldActivity extends Activity {
+public class HelloWorldActivity extends Activity implements LocationListener{
 
     // This code will be returned in onActivityResult() when the enable Bluetooth activity exits.
     private static final int REQUEST_ENABLE_BT = 1;
+    private Vibration vibration;
 
     private TextView mTextView;
+    private float pitch;
+    private float roll;
+    private float yaw;
+    private double latitude;
+    private double longitude;
+    
+    LocationManager locationManager ;
+    String provider;
 
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
     private DeviceListener mListener = new AbstractDeviceListener() {
-
+    	
         private Arm mArm = Arm.UNKNOWN;
         private XDirection mXDirection = XDirection.UNKNOWN;
 
@@ -45,6 +59,8 @@ public class HelloWorldActivity extends Activity {
         public void onConnect(Myo myo, long timestamp) {
             // Set the text color of the text view to cyan when a Myo connects.
             mTextView.setTextColor(Color.CYAN);
+            vibration = new Vibration(myo);
+            vibration.start();
         }
 
         // onDisconnect() is called whenever a Myo has been disconnected.
@@ -60,6 +76,7 @@ public class HelloWorldActivity extends Activity {
         public void onArmRecognized(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
             mArm = arm;
             mXDirection = xDirection;
+            mTextView.setTextColor(Color.YELLOW);
         }
 
         // onArmLost() is called whenever Myo has detected that it was moved from a stable position on a person's arm after
@@ -76,9 +93,9 @@ public class HelloWorldActivity extends Activity {
         @Override
         public void onOrientationData(Myo myo, long timestamp, Quaternion rotation) {
             // Calculate Euler angles (roll, pitch, and yaw) from the quaternion.
-            float roll = (float) Math.toDegrees(Quaternion.roll(rotation));
-            float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
-            float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
+            roll = (float) Math.toDegrees(Quaternion.roll(rotation));
+            pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
+            yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
             // Adjust roll and pitch for the orientation of the Myo on the arm.
             if (mXDirection == XDirection.TOWARD_ELBOW) {
@@ -87,9 +104,16 @@ public class HelloWorldActivity extends Activity {
             }
 
             // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
+            /*
             mTextView.setRotation(roll);
             mTextView.setRotationX(pitch);
             mTextView.setRotationY(yaw);
+            */
+            mTextView.setRotation(0);
+            mTextView.setRotationX(0);
+            mTextView.setRotationY(0);
+            vibration.setPeriod(100+10*(int)Math.abs(yaw));
+            mTextView.setText(Float.toString(yaw));
         }
 
         // onPose() is called whenever a Myo provides a new pose.
@@ -98,6 +122,7 @@ public class HelloWorldActivity extends Activity {
             // Handle the cases of the Pose enumeration, and change the text of the text view
             // based on the pose we receive.
             switch (pose) {
+            /*
                 case UNKNOWN:
                     mTextView.setText(getString(R.string.hello_world));
                     break;
@@ -114,7 +139,7 @@ public class HelloWorldActivity extends Activity {
                     mTextView.setText(getString(restTextId));
                     break;
                 case FIST:
-                    mTextView.setText(getString(R.string.pose_fist));
+                	mTextView.setText(getString(R.string.pose_fist));
                     break;
                 case WAVE_IN:
                     mTextView.setText(getString(R.string.pose_wavein));
@@ -128,6 +153,7 @@ public class HelloWorldActivity extends Activity {
                 case THUMB_TO_PINKY:
                     mTextView.setText(getString(R.string.pose_thumbtopinky));
                     break;
+                    */
             }
         }
     };
@@ -136,6 +162,26 @@ public class HelloWorldActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello_world);
+        
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        
+        if(provider!=null && !provider.equals("")){
+        	 
+            // Get the location from the given provider
+            Location location = locationManager.getLastKnownLocation(provider);
+ 
+            locationManager.requestLocationUpdates(provider, 20000, 1, this);
+ 
+            if(location!=null)
+                onLocationChanged(location);
+            else
+                Toast.makeText(getBaseContext(), "Location can't be retrieved", Toast.LENGTH_SHORT).show();
+ 
+        }else{
+            Toast.makeText(getBaseContext(), "No Provider Found", Toast.LENGTH_SHORT).show();
+        }
 
         mTextView = (TextView) findViewById(R.id.text);
 
@@ -166,6 +212,7 @@ public class HelloWorldActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        vibration.cancel();
         // We don't want any callbacks when the Activity is gone, so unregister the listener.
         Hub.getInstance().removeListener(mListener);
 
@@ -173,6 +220,7 @@ public class HelloWorldActivity extends Activity {
             // The Activity is finishing, so shutdown the Hub. This will disconnect from the Myo.
             Hub.getInstance().shutdown();
         }
+        
     }
 
     @Override
@@ -207,5 +255,28 @@ public class HelloWorldActivity extends Activity {
         // Launch the ScanActivity to scan for Myos to connect to.
         Intent intent = new Intent(this, ScanActivity.class);
         startActivity(intent);
+    }
+    
+    @Override
+    public void onLocationChanged(Location location) {
+    	longitude = location.getLongitude();
+    	latitude = location.getLatitude();
+    	//mTextView.setText(Double.toString(longitude)+":"+Double.toString(latitude));
+    	
+    }
+    
+    @Override
+    public void onProviderDisabled(String provider) {
+        // TODO Auto-generated method stub
+    }
+ 
+    @Override
+    public void onProviderEnabled(String provider) {
+        // TODO Auto-generated method stub
+    }
+ 
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
     }
 }
