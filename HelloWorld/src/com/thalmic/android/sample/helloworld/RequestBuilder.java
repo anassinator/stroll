@@ -89,6 +89,10 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
                 + RequestBuilder.DEPARTURE_TIME + RequestBuilder.getCurrentTime() + "&"
                 + RequestBuilder.MODE + RequestBuilder.WALK;
     }
+    
+    public static void resetDirections() {
+    	RequestBuilder.Directions = null;
+    }
 
     @Override
     protected JSONObject doInBackground(String... place) {
