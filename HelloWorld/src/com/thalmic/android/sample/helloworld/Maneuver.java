@@ -1,7 +1,7 @@
 package com.thalmic.android.sample.helloworld;
 
 public class Maneuver {
-	Direction direction;
+	public Direction direction;
 	
 	public enum Direction {
 		FORWARD, BACKWARD, RIGHT, LEFT
