@@ -1,7 +1,11 @@
 package com.thalmic.android.sample.helloworld;
 
 import org.json.*;
+
+import android.graphics.Color;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class Step {
 	private JSONObject json;
@@ -10,6 +14,7 @@ public class Step {
 	public LatLng start_location;
 	public LatLng end_location;
 	public Maneuver maneuver;
+	public PolylineOptions polyline;
 	
 	public Step(JSONObject json) {
 		this.json = json;
@@ -18,6 +23,7 @@ public class Step {
 		this.start_location = parse_coordinates("start_location");
 		this.end_location = parse_coordinates("end_location");
 		this.maneuver = parse_maneuver();
+		this.polyline = parse_polyline();
 	}
 	
 	private int parse_value(String name) {
@@ -47,5 +53,11 @@ public class Step {
 		} catch (JSONException e) {
 			return new Maneuver("");
 		}
+	}
+	
+	private PolylineOptions parse_polyline() {
+		PolylineOptions poly = new PolylineOptions();
+		poly.add(this.start_location, this.end_location).width(5).color(Color.RED);
+		return poly;
 	}
 }
