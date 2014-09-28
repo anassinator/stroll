@@ -14,10 +14,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -208,7 +211,7 @@ public class StrollActivity extends Activity implements LocationListener{
             else
                 Toast.makeText(getBaseContext(), "Location can't be retrieved", Toast.LENGTH_SHORT).show();
  
-        }else{
+        } else{
             Toast.makeText(getBaseContext(), "No Provider Found", Toast.LENGTH_SHORT).show();
         }
 
@@ -226,6 +229,23 @@ public class StrollActivity extends Activity implements LocationListener{
         
         searchField = (EditText) searchStepLayout.findViewById(R.id.search_field);
         percentage = (TextView) progressStepLayout.findViewById(R.id.percent);
+        final Activity yolo = this;
+        searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                	InputMethodManager inputManager = 
+                	        (InputMethodManager) getApplicationContext().
+                	            getSystemService(Context.INPUT_METHOD_SERVICE); 
+                	inputManager.hideSoftInputFromWindow(
+                	        yolo.getCurrentFocus().getWindowToken(),
+                	        InputMethodManager.HIDE_NOT_ALWAYS); 
+                    onSearchButtonClicked(null);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -300,10 +320,10 @@ public class StrollActivity extends Activity implements LocationListener{
 	    	for (int i = current_step; i < route.steps.length; i++) {
 	    		distance_left += route.steps[i].distance;
 	    	}
-	    	int percent_distance = (int)(distance_left / (double)route.distance * 100);
+	    	int percent_distance = 100 - (int)(distance_left / (double)route.distance * 100);
 	    	percent_distance = Math.max(percent_distance, 0);
 	    	
-	    	percentage.setText(String.valueOf(100 - percent_distance) + "%");
+	    	percentage.setText(String.valueOf(percent_distance) + "%");
     	}
     	Log.w("Location", Double.toString(longitude)+":"+Double.toString(latitude));
     }

@@ -33,13 +33,13 @@ public class RequestHandler {
     	try {
 	        JSONArray json_legs = route.getJSONArray("legs");
 	        JSONArray json_steps = json_legs.getJSONObject(0).getJSONArray("steps");
-	
+	        String end = json_legs.getJSONObject(0).getString("end_address");
 	        Step[] steps = new Step[json_steps.length()];
 	        for (int j = 0; j < json_steps.length(); j++) {
 	            steps[j] = new Step(json_steps.getJSONObject(j));
 	        }
 	        
-	        return new Route(steps);
+	        return new Route(steps, end);
     	} catch (JSONException e) {
         	return null;
     	}

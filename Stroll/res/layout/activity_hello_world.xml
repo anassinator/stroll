@@ -67,14 +67,15 @@
         android:visibility="gone" >
 
         <TableLayout
-            android:layout_width="250dip"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center" >
 
             <TableRow
                 android:id="@+id/TableRow02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
 
                 <TextView
                     android:id="@+id/TextView01"
@@ -91,7 +92,7 @@
 
             <TableRow
                 android:id="@+id/tableRow3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="25dp" >
 
@@ -99,11 +100,13 @@
                     android:id="@+id/search_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="fill_horizontal"
+                    android:layout_gravity="center"
                     android:ems="10"
+                    android:imeOptions="actionSearch"
                     android:lines="1"
                     android:maxLines="1"
                     android:minLines="1"
+                    android:singleLine="true"
                     android:textColor="#ffffff"
                     android:textColorHint="#EEEEEE"
                     android:textColorLink="#ffffff"
@@ -149,9 +152,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="0"
+            android:text="100%"
             android:textColor="#ffffff"
-            android:textSize="200sp"
+            android:textSize="150sp"
             android:visibility="visible"
             tools:ignore="SpUsage" />
 
