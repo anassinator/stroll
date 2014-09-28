@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_gravity="center"
-        android:visibility="visible" >
+        android:visibility="invisible" >
 
     <TableLayout
         android:layout_width="250dip"
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_gravity="center"
-        android:visibility="invisible" >
+        android:visibility="visible" >
 
         <TableLayout
             android:layout_width="250dip"
@@ -112,10 +112,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:ems="10"
+                    android:lines="1"
                     android:maxLines="1"
+                    android:minLines="1"
+                    android:nextFocusDown="@id/search_button"
+                    android:nextFocusForward="@id/search_button"
                     android:textColor="#ffffff"
                     android:textColorHint="#EEEEEE"
-                    android:textColorLink="#ffffff" >
+                    android:textColorLink="#ffffff"
+                    android:textCursorDrawable="@null" >
 
                     <requestFocus />
                 </EditText>
