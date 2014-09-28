@@ -12,16 +12,17 @@ public class LocationHandler {
 	private static Boolean searching = false;
 	
 	public static void set_vibration(Vibration vibration) {
-		LocationHandler.vibration = vibration; 
+		LocationHandler.vibration = vibration;
+		LocationHandler.vibration.start();
 	}
 
 	public static void update_orientation(Quaternion quat) {
 		yaw = (float) Math.toDegrees(Quaternion.yaw(quat));
 		if (LocationHandler.searching) {
-			vibration.start();
+			vibration.startVibrating();
 			LocationHandler.notify(LocationHandler.vibration);
 		} else {
-			vibration.stop();
+			vibration.stopVibrating();
 		}
 	}
 
