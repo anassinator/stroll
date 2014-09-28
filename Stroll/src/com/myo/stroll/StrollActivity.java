@@ -81,7 +81,7 @@ public class StrollActivity extends Activity implements LocationListener{
 			try {
 				directions = new RequestBuilder().execute("La%20Commune%20Montreal", "McGill%20University").get();
 	            Log.w("debugger", "Yay! Got directions");
-	            vibration.stop();
+//	            vibration.stop();
 	            route = new RequestHandler(directions).routes[0];
 	            onLocationChanged(location_variable);
 			} catch (InterruptedException e) {

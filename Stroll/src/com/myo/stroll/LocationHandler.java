@@ -13,7 +13,7 @@ public class LocationHandler {
 	
 	public static void set_vibration(Vibration vibration) {
 		LocationHandler.vibration = vibration;
-		LocationHandler.vibration.start();
+//		LocationHandler.vibration.start();
 	}
 
 	public static void update_orientation(Quaternion quat) {
