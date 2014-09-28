@@ -245,7 +245,6 @@ public class StrollActivity extends Activity implements LocationListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        vibration.stop();
         // We don't want any callbacks when the Activity is gone, so unregister the listener.
         Hub.getInstance().removeListener(mListener);
 

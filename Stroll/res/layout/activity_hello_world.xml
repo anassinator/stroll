@@ -102,7 +102,7 @@
 
             <TableRow
                 android:id="@+id/tableRow3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="25dp" >
 
@@ -110,13 +110,11 @@
                     android:id="@+id/editText1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="fill_horizontal"
                     android:ems="10"
                     android:lines="1"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:nextFocusDown="@id/search_button"
-                    android:nextFocusForward="@id/search_button"
                     android:textColor="#ffffff"
                     android:textColorHint="#EEEEEE"
                     android:textColorLink="#ffffff"
