@@ -56,6 +56,7 @@ public class StrollActivity extends Activity implements LocationListener{
     private FrameLayout progressStepLayout;
     
     private TextView percentage;
+    private TextView destination;
     private EditText searchField; 
 
     private float pitch;
@@ -161,7 +162,7 @@ public class StrollActivity extends Activity implements LocationListener{
         			break;       			
         		case REST:
         			current_pose = "REST";
-        			LocationHandler.search(true);
+        			LocationHandler.search(false);
         			break;     
         		case THUMB_TO_PINKY:
         			current_pose = "PINKY";
@@ -229,6 +230,7 @@ public class StrollActivity extends Activity implements LocationListener{
         
         searchField = (EditText) searchStepLayout.findViewById(R.id.search_field);
         percentage = (TextView) progressStepLayout.findViewById(R.id.percent);
+        destination = (TextView) progressStepLayout.findViewById(R.id.destination_text);
         final Activity yolo = this;
         searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -354,6 +356,7 @@ public class StrollActivity extends Activity implements LocationListener{
             if (routes.length > 0) {
             	Toast.makeText(getApplicationContext(), "Directions found", Toast.LENGTH_LONG).show();
             	route = routes[0];
+            	destination.setText(route.end_address);
             } else {
             	Toast.makeText(getApplicationContext(), "Directions not found", Toast.LENGTH_LONG).show();
             	return;
