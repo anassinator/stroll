@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.location.Criteria;
@@ -79,7 +80,7 @@ public class StrollActivity extends Activity implements LocationListener{
             Log.w("debugger", "Waiting..");
             JSONObject directions;
 			try {
-				directions = new RequestBuilder().execute("La%20Commune%20Montreal", "McGill%20University").get();
+				directions = new RequestBuilder().execute("La Commune Montreal", "McGill University").get();
 	            Log.w("debugger", "Yay! Got directions");
 //	            vibration.stop();
 	            route = new RequestHandler(directions).routes[0];
@@ -273,14 +274,14 @@ public class StrollActivity extends Activity implements LocationListener{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (R.id.action_scan == id) {
-            onScanActionSelected();
-            return true;
-        }
+//        if (R.id.action_scan == id) {
+//            onScanActionSelected();
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
-    private void onScanActionSelected() {
+    public void onScanActionSelected(View view) {
         // Launch the ScanActivity to scan for Myos to connect to.
         Intent intent = new Intent(this, ScanActivity.class);
         startActivity(intent);

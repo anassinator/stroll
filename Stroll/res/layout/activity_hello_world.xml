@@ -3,16 +3,67 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0099ff"
     tools:context="com.myo.stroll.StrollActivity"
-    tools:ignore="MergeRootFrame">
+    tools:ignore="MergeRootFrame" >
 
     <TextView
-        android:id="@+id/text"
-        android:text="@string/hello_world"
-        android:textSize="50dp"
+        android:id="@+id/percent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        tools:ignore="SpUsage"/>
+        android:text="0"
+        android:textColor="#ffffff"
+        android:textSize="200sp"
+        android:visibility="invisible"
+        tools:ignore="SpUsage" />
+
+    <FrameLayout
+        android:id="@+id/pair_step"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="250dp" >
+
+    <TableLayout
+        android:layout_width="250dip"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" >
+
+        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="Roboto Slab"
+                android:gravity="center_horizontal"
+                android:text="Where&apos;s my Myo?"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="50sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="50dp" >
+
+            <Button
+                android:id="@+id/connect"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:fontFamily="Roboto Slab"
+                android:minWidth="128dip"
+                android:onClick="@string/scan_method"
+                android:text="Scan"
+                android:textColor="#0099ff" />
+
+        </TableRow>
+    </TableLayout></FrameLayout>
+
+    
 
 </FrameLayout>
