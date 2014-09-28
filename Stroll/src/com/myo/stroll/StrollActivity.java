@@ -303,7 +303,7 @@ public class StrollActivity extends Activity implements LocationListener{
 	    	int percent_distance = (int)(distance_left / (double)route.distance * 100);
 	    	percent_distance = Math.max(percent_distance, 0);
 	    	
-	    	percentage.setText(String.valueOf(100 - percent_distance));
+	    	percentage.setText(String.valueOf(100 - percent_distance) + "%");
     	}
     	Log.w("Location", Double.toString(longitude)+":"+Double.toString(latitude));
     }
