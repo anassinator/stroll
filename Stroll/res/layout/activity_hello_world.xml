@@ -8,17 +8,6 @@
     tools:context="com.myo.stroll.StrollActivity"
     tools:ignore="MergeRootFrame" >
 
-    <TextView
-        android:id="@+id/percent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="0"
-        android:textColor="#ffffff"
-        android:textSize="200sp"
-        android:visibility="invisible"
-        tools:ignore="SpUsage" />
-
     <FrameLayout
         android:id="@+id/pair_step"
         android:layout_width="match_parent"
@@ -75,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_gravity="center"
-        android:visibility="invisible" >
+        android:visibility="gone" >
 
         <TableLayout
             android:layout_width="250dip"
@@ -147,6 +136,25 @@
 
             </TableRow>
         </TableLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_step"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="0"
+            android:textColor="#ffffff"
+            android:textSize="200sp"
+            android:visibility="visible"
+            tools:ignore="SpUsage" />
+
     </FrameLayout>
 
 </FrameLayout>
