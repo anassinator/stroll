@@ -141,6 +141,7 @@
                     android:background="#ffffff"
                     android:fontFamily="Roboto Slab"
                     android:minWidth="192dip"
+                    android:onClick="@string/search_onlick"
                     android:text="Search"
                     android:textColor="#33b5e5" />
 

@@ -12,15 +12,13 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.location.Criteria;
 import android.location.Location;
@@ -46,8 +44,11 @@ public class StrollActivity extends Activity implements LocationListener{
     // This code will be returned in onActivityResult() when the enable Bluetooth activity exits.
     private static final int REQUEST_ENABLE_BT = 1;
     private Vibration vibration;
+    
+    // Layouts
+    private FrameLayout pairStepLayout = (FrameLayout) findViewById(R.id.pair_step);
+    private FrameLayout searchStepLayout = (FrameLayout) findViewById(R.id.search_step);
 
-    private TextView mTextView;
     private float pitch;
     private float roll;
     private float yaw;
@@ -73,33 +74,24 @@ public class StrollActivity extends Activity implements LocationListener{
         @Override
         public void onConnect(Myo myo, long timestamp) {
             // Set the text color of the text view to cyan when a Myo connects.
-            mTextView.setTextColor(Color.CYAN);
+        	Toast.makeText(getApplicationContext(), "Myo Connected", Toast.LENGTH_LONG).show();
             Log.w("debugger", "Wut");
             vibration = new Vibration(myo);
             vibration.start();
             LocationHandler.set_vibration(vibration);
-            Log.w("debugger", "Waiting..");
-            JSONObject directions;
-			try {
-				directions = new RequestBuilder().execute("La Commune Montreal", "McGill University").get();
-	            Log.w("debugger", "Yay! Got directions");
-//	            vibration.stop();
-	            route = new RequestHandler(directions).routes[0];
-	            onLocationChanged(location_variable);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            
+            pairStepLayout.setVisibility(FrameLayout.GONE);
+            searchStepLayout.setVisibility(FrameLayout.VISIBLE);
         }
 
         // onDisconnect() is called whenever a Myo has been disconnected.
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
             // Set the text color of the text view to red when a Myo disconnects.
-            mTextView.setTextColor(Color.RED);
+        	Toast.makeText(getApplicationContext(), "Myo Disconnected", Toast.LENGTH_LONG).show();
+        	
+        	searchStepLayout.setVisibility(FrameLayout.GONE);
+        	pairStepLayout.setVisibility(FrameLayout.VISIBLE);
         }
 
         // onArmRecognized() is called whenever Myo has recognized a setup gesture after someone has put it on their
@@ -108,7 +100,7 @@ public class StrollActivity extends Activity implements LocationListener{
         public void onArmRecognized(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
             mArm = arm;
             mXDirection = xDirection;
-            mTextView.setTextColor(Color.YELLOW);
+            Toast.makeText(getApplicationContext(), "Arm Detected", Toast.LENGTH_LONG).show();
         }
 
         // onArmLost() is called whenever Myo has detected that it was moved from a stable position on a person's arm after
@@ -118,7 +110,7 @@ public class StrollActivity extends Activity implements LocationListener{
         public void onArmLost(Myo myo, long timestamp) {
             mArm = Arm.UNKNOWN;
             mXDirection = XDirection.UNKNOWN;
-            mTextView.setTextColor(Color.CYAN);
+            Toast.makeText(getApplicationContext(), "Arm Lost", Toast.LENGTH_LONG).show();
         }
 
         // onOrientationData() is called whenever a Myo provides its current orientation,
@@ -136,18 +128,10 @@ public class StrollActivity extends Activity implements LocationListener{
                 pitch *= -1;
             }
 
-            // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
-            /*
-            mTextView.setRotation(roll);
-            mTextView.setRotationX(pitch);
-            mTextView.setRotationY(yaw);
-            */
-            mTextView.setRotation(0);
-            mTextView.setRotationX(0);
-            mTextView.setRotationY(0);
         	LocationHandler.update_orientation(rotation);
         	String rpy = String.format("R: %-3.0f\nP: %-3.0f\nY: %-3.0f\n%s\n%-3.0f\n%3.2f\n%3.2f", roll, pitch, yaw, current_pose, Coordinates.bearing, current_location.longitude, current_location.latitude);
-            mTextView.setText(rpy);
+
+        	Log.w("Orientation",rpy);
         }
 
         // onPose() is called whenever a Myo provides a new pose.
@@ -215,8 +199,6 @@ public class StrollActivity extends Activity implements LocationListener{
         }else{
             Toast.makeText(getBaseContext(), "No Provider Found", Toast.LENGTH_SHORT).show();
         }
-
-        mTextView = (TextView) findViewById(R.id.text);
 
         // First, we initialize the Hub singleton with an application identifier.
         Hub hub = Hub.getInstance();
@@ -300,8 +282,7 @@ public class StrollActivity extends Activity implements LocationListener{
 	    		current_step++;
 	    	}
     	}
-    	//mTextView.setText(Double.toString(longitude)+":"+Double.toString(latitude));
-    	
+    	Log.w("Location", Double.toString(longitude)+":"+Double.toString(latitude));
     }
     
     @Override
@@ -317,5 +298,23 @@ public class StrollActivity extends Activity implements LocationListener{
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // TODO Auto-generated method stub
+    }
+    
+    public void onSearchButtonClicked(View view) {
+        Log.w("debugger", "Waiting..");
+        JSONObject directions;
+		try {
+			directions = new RequestBuilder().execute("La Commune Montreal", "McGill University").get();
+            Log.w("debugger", "Yay! Got directions");
+//            vibration.stop();
+            route = new RequestHandler(directions).routes[0];
+            onLocationChanged(location_variable);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
