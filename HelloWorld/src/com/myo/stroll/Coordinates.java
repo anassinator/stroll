@@ -1,4 +1,4 @@
-package com.thalmic.android.sample.helloworld;
+package com.myo.stroll;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,11 +25,4 @@ public class Coordinates {
 		bearing = (result + 360.0) % 360.0;
 	}
 
-	public static void main(String [ ] args) {
-		LatLng latLng1 = new LatLng(50.066388889,5.731388889);
-		LatLng latLng2 = new LatLng(58.643888889,3.07);
-		update(latLng1,latLng2);
-		System.out.println(bearing);
-		System.out.println(distance);
-	}
 }

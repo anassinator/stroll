@@ -1,4 +1,4 @@
-package com.thalmic.android.sample.helloworld;
+package com.myo.stroll;
 
 public class Route {
 	Step[] steps;

@@ -3,7 +3,7 @@
  * Distributed under the Myo SDK license agreement. See LICENSE.txt for details.
  */
 
-package com.thalmic.android.sample.helloworld;
+package com.myo.stroll;
 
 import java.util.concurrent.ExecutionException;
 
@@ -26,6 +26,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.content.Context;
 
+import com.thalmic.android.sample.helloworld.R;
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
@@ -38,7 +39,7 @@ import com.thalmic.myo.scanner.ScanActivity;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class HelloWorldActivity extends Activity implements LocationListener{
+public class StrollActivity extends Activity implements LocationListener{
 
     // This code will be returned in onActivityResult() when the enable Bluetooth activity exits.
     private static final int REQUEST_ENABLE_BT = 1;

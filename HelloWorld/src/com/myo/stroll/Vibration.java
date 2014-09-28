@@ -1,4 +1,4 @@
-package com.thalmic.android.sample.helloworld;
+package com.myo.stroll;
 import java.util.Timer;
 import java.util.TimerTask;
 
