@@ -3,6 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:windowActionBar="false"
     android:background="#0099ff"
     tools:context="com.myo.stroll.StrollActivity"
     tools:ignore="MergeRootFrame" >
