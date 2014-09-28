@@ -26,7 +26,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.content.Context;
 
-import com.thalmic.android.sample.helloworld.R;
+import com.myo.stroll.R;
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
