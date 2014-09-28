@@ -3,8 +3,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#33b5e5"
     android:windowActionBar="false"
-    android:background="#0099ff"
     tools:context="com.myo.stroll.StrollActivity"
     tools:ignore="MergeRootFrame" >
 
@@ -22,8 +22,9 @@
     <FrameLayout
         android:id="@+id/pair_step"
         android:layout_width="match_parent"
+        android:layout_height="250dp"
         android:layout_gravity="center"
-        android:layout_height="250dp" >
+        android:visibility="visible" >
 
     <TableLayout
         android:layout_width="250dip"
@@ -36,6 +37,7 @@
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:fontFamily="Roboto Slab"
                 android:gravity="center_horizontal"
                 android:text="Where&apos;s my Myo?"
@@ -51,20 +53,96 @@
             android:paddingTop="50dp" >
 
             <Button
-                android:id="@+id/connect"
+                android:id="@+id/connect_button"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:background="#ffffff"
                 android:fontFamily="Roboto Slab"
-                android:minWidth="128dip"
+                android:minWidth="192dip"
                 android:onClick="@string/scan_method"
                 android:text="Scan"
-                android:textColor="#0099ff" />
+                android:textColor="#33b5e5" />
 
         </TableRow>
-    </TableLayout></FrameLayout>
+    </TableLayout>
 
-    
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/search_step"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:visibility="invisible" >
+
+        <TableLayout
+            android:layout_width="250dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" >
+
+            <TableRow
+                android:id="@+id/TableRow02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/TextView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:fontFamily="Roboto Slab"
+                    android:gravity="center_horizontal"
+                    android:text="Where to?"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="50sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="25dp" >
+
+                <EditText
+                    android:id="@+id/editText1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#EEEEEE"
+                    android:textColorLink="#ffffff" >
+
+                    <requestFocus />
+                </EditText>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/TableRow01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="25dp" >
+
+                <Button
+                    android:id="@+id/search_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="#ffffff"
+                    android:fontFamily="Roboto Slab"
+                    android:minWidth="192dip"
+                    android:text="Search"
+                    android:textColor="#33b5e5" />
+
+            </TableRow>
+        </TableLayout>
+    </FrameLayout>
 
 </FrameLayout>
