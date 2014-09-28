@@ -18,7 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.location.Criteria;
 import android.location.Location;
@@ -48,6 +50,10 @@ public class StrollActivity extends Activity implements LocationListener{
     // Layouts
     private FrameLayout pairStepLayout;
     private FrameLayout searchStepLayout;
+    private FrameLayout progressStepLayout;
+    
+    private TextView percentage;
+    private EditText searchField; 
 
     private float pitch;
     private float roll;
@@ -82,6 +88,7 @@ public class StrollActivity extends Activity implements LocationListener{
             
             pairStepLayout.setVisibility(FrameLayout.GONE);
             searchStepLayout.setVisibility(FrameLayout.VISIBLE);
+            progressStepLayout.setVisibility(FrameLayout.GONE);
         }
 
         // onDisconnect() is called whenever a Myo has been disconnected.
@@ -90,8 +97,9 @@ public class StrollActivity extends Activity implements LocationListener{
             // Set the text color of the text view to red when a Myo disconnects.
         	Toast.makeText(getApplicationContext(), "Myo Disconnected", Toast.LENGTH_LONG).show();
         	
-        	searchStepLayout.setVisibility(FrameLayout.GONE);
         	pairStepLayout.setVisibility(FrameLayout.VISIBLE);
+        	searchStepLayout.setVisibility(FrameLayout.GONE);
+        	progressStepLayout.setVisibility(FrameLayout.GONE);
         }
 
         // onArmRecognized() is called whenever Myo has recognized a setup gesture after someone has put it on their
@@ -182,7 +190,8 @@ public class StrollActivity extends Activity implements LocationListener{
        
         pairStepLayout = (FrameLayout) findViewById(R.id.pair_step);
         searchStepLayout = (FrameLayout) findViewById(R.id.search_step);
-
+        progressStepLayout = (FrameLayout) findViewById(R.id.progress_step);
+        
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
@@ -214,6 +223,9 @@ public class StrollActivity extends Activity implements LocationListener{
 
         // Next, register for DeviceListener callbacks.
         hub.addListener(mListener);
+        
+        searchField = (EditText) searchStepLayout.findViewById(R.id.search_field);
+        percentage = (TextView) progressStepLayout.findViewById(R.id.percent);
     }
 
     @Override
@@ -279,11 +291,19 @@ public class StrollActivity extends Activity implements LocationListener{
     	Log.w("debugger", "you moved");
     	longitude = location.getLongitude();
     	latitude = location.getLatitude();
-    	current_location = new LatLng(longitude, latitude);
+    	current_location = new LatLng(latitude, longitude);
     	if (route != null) {
 	    	if (LocationHandler.update_location(current_location, route.steps[current_step].end_location)) {
 	    		current_step++;
 	    	}
+	    	double distance_left = Coordinates.distance;
+	    	for (int i = current_step; i < route.steps.length; i++) {
+	    		distance_left += route.steps[i].distance;
+	    	}
+	    	int percent_distance = (int)(distance_left / (double)route.distance * 100);
+	    	percent_distance = Math.max(percent_distance, 0);
+	    	
+	    	percentage.setText(String.valueOf(100 - percent_distance));
     	}
     	Log.w("Location", Double.toString(longitude)+":"+Double.toString(latitude));
     }
@@ -307,11 +327,22 @@ public class StrollActivity extends Activity implements LocationListener{
         Log.w("debugger", "Waiting..");
         JSONObject directions;
 		try {
-			directions = new RequestBuilder().execute("La Commune Montreal", "McGill University").get();
+			directions = new RequestBuilder().execute(String.valueOf(current_location.latitude) + "," + String.valueOf(current_location.longitude), searchField.getText().toString()).get();
+				
             Log.w("debugger", "Yay! Got directions");
-//            vibration.stop();
-            route = new RequestHandler(directions).routes[0];
+            Route[] routes = new RequestHandler(directions).routes;
+            if (routes.length > 0) {
+            	Toast.makeText(getApplicationContext(), "Directions found", Toast.LENGTH_LONG).show();
+            	route = routes[0];
+            } else {
+            	Toast.makeText(getApplicationContext(), "Directions not found", Toast.LENGTH_LONG).show();
+            	return;
+            }
             onLocationChanged(location_variable);
+            
+            pairStepLayout.setVisibility(FrameLayout.GONE);
+            searchStepLayout.setVisibility(FrameLayout.GONE);
+            progressStepLayout.setVisibility(FrameLayout.VISIBLE);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
