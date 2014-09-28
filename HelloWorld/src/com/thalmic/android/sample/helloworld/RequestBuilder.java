@@ -33,9 +33,6 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
     private static final String WALK = "walking";
     private static final String API_KEY = "AIzaSyA3bq0V_IMiwMGL4MR3M-1LmdbVB8kB-0k";
     
-    // Stores result directions from api call
-    public static JSONObject Directions = null;
-    
     private static String getCurrentTime() {
         return Integer.toString((int)(System.currentTimeMillis() / 1000));
     } 
@@ -83,6 +80,7 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
         
         if (directionString != null && !directionString.isEmpty()) {
             try {
+            	Log.w("debugger", "Got direction string");
                 return new JSONObject(directionString);
             }
             catch(Exception e) {
@@ -102,16 +100,9 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
                 + RequestBuilder.DEPARTURE_TIME + RequestBuilder.getCurrentTime() + "&"
                 + RequestBuilder.MODE + RequestBuilder.WALK;
     }
-    
-    // Reset directions data to make it ready for next use
-    public static void ResetDirections() {
-    	RequestBuilder.Directions = null;
-    }
 
     @Override
     protected JSONObject doInBackground(String... place) {
-    	// Reset direction data to be safe
-    	RequestBuilder.ResetDirections();
     	
         if (place.length != 2)
             return null;
@@ -120,10 +111,5 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
         // place[0] - origin
         // place[1] - destination
         return this.getDirections(place[0], place[1]);
-    }
-    
-    @Override
-    protected void onPostExecute(JSONObject result) {
-        RequestBuilder.Directions = result;
     }
 }

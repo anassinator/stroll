@@ -5,6 +5,10 @@
 
 package com.thalmic.android.sample.helloworld;
 
+import java.util.concurrent.ExecutionException;
+
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -68,14 +72,20 @@ public class HelloWorldActivity extends Activity implements LocationListener{
             Log.w("debugger", "Wut");
             vibration = new Vibration(myo);
             // vibration.start();
-            Log.w("debugger", "Vibrate");
-            new RequestBuilder().execute("La Commune Montreal", "McGill University");
-            Log.w("debugger", "Waiting...");
-            while (RequestBuilder.Directions == null);
-            Log.w("debugger", "Yay!");
-            vibration.cancel();
-            route = new RequestHandler(RequestBuilder.Directions).routes[0];
-            RequestBuilder.ResetDirections();
+            Log.w("debugger", "Waiting..");
+            JSONObject directions;
+			try {
+				directions = new RequestBuilder().execute("La%20Commune%20Montreal", "McGill%20University").get();
+	            Log.w("debugger", "Yay! Got directions");
+	            vibration.cancel();
+	            route = new RequestHandler(directions).routes[0];
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         // onDisconnect() is called whenever a Myo has been disconnected.
