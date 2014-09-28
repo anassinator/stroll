@@ -174,7 +174,7 @@ public class StrollActivity extends Activity implements LocationListener{
         			break;     
         		case FIST:
         			current_pose = "FIST";
-        			LocationHandler.search(false);
+        			LocationHandler.search(true);
         			break;
         		case FINGERS_SPREAD:
         			current_pose = "FINGERS";
