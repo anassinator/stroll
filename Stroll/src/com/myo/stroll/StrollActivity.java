@@ -46,8 +46,8 @@ public class StrollActivity extends Activity implements LocationListener{
     private Vibration vibration;
     
     // Layouts
-    private FrameLayout pairStepLayout = (FrameLayout) findViewById(R.id.pair_step);
-    private FrameLayout searchStepLayout = (FrameLayout) findViewById(R.id.search_step);
+    private FrameLayout pairStepLayout;
+    private FrameLayout searchStepLayout;
 
     private float pitch;
     private float roll;
@@ -179,7 +179,10 @@ public class StrollActivity extends Activity implements LocationListener{
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getActionBar().hide();
         setContentView(R.layout.activity_hello_world);
-        
+       
+        pairStepLayout = (FrameLayout) findViewById(R.id.pair_step);
+        searchStepLayout = (FrameLayout) findViewById(R.id.search_step);
+
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
