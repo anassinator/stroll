@@ -52,6 +52,7 @@ public class HelloWorldActivity extends Activity implements LocationListener{
     private double longitude;
     private int current_step = 0;
     private LatLng current_location;
+    private String current_pose;
     private Route route;
 
     LocationManager locationManager ;
@@ -71,13 +72,14 @@ public class HelloWorldActivity extends Activity implements LocationListener{
             mTextView.setTextColor(Color.CYAN);
             Log.w("debugger", "Wut");
             vibration = new Vibration(myo);
-            // vibration.start();
+            vibration.start();
+            LocationHandler.set_vibration(vibration);
             Log.w("debugger", "Waiting..");
             JSONObject directions;
 			try {
 				directions = new RequestBuilder().execute("La%20Commune%20Montreal", "McGill%20University").get();
 	            Log.w("debugger", "Yay! Got directions");
-	            vibration.cancel();
+	            vibration.stop();
 	            route = new RequestHandler(directions).routes[0];
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -111,6 +113,7 @@ public class HelloWorldActivity extends Activity implements LocationListener{
         public void onArmLost(Myo myo, long timestamp) {
             mArm = Arm.UNKNOWN;
             mXDirection = XDirection.UNKNOWN;
+            mTextView.setTextColor(Color.CYAN);
         }
 
         // onOrientationData() is called whenever a Myo provides its current orientation,
@@ -138,7 +141,8 @@ public class HelloWorldActivity extends Activity implements LocationListener{
             mTextView.setRotationX(0);
             mTextView.setRotationY(0);
         	LocationHandler.update_orientation(rotation);
-            mTextView.setText(Float.toString(yaw));
+        	String rpy = String.format("R: %-3.0f\nP: %-3.0f\nY: %-3.0f\n%s", roll, pitch, yaw, current_pose);
+            mTextView.setText(rpy);
         }
 
         // onPose() is called whenever a Myo provides a new pose.
@@ -148,10 +152,30 @@ public class HelloWorldActivity extends Activity implements LocationListener{
             // based on the pose we receive.
         	switch (pose) {
         		case FIST:
-        			LocationHandler.search(route.steps[current_step]);
+        			current_pose = "FIST";
+        			LocationHandler.search(true);
         			break;
+        		case UNKNOWN:
+        			current_pose = "UNKNOWN";
+        			LocationHandler.search(false);
+        			break;       			
+        		case REST:
+        			current_pose = "REST";
+        			LocationHandler.search(false);
+        			break;     
+        		case THUMB_TO_PINKY:
+        			current_pose = "THUMB PINKY <3";
+        			LocationHandler.search(false);
+        			break;     
+        		case WAVE_IN:
+        			current_pose = "WAVE IN";
+        			LocationHandler.search(false);
+        			break;     
+        		case WAVE_OUT:
+        			current_pose = "WAVE OUT";
+        			LocationHandler.search(false);
+        			break;     
         		default:
-        			break;
         	}
         }
     };
@@ -210,7 +234,7 @@ public class HelloWorldActivity extends Activity implements LocationListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        vibration.cancel();
+        vibration.stop();
         // We don't want any callbacks when the Activity is gone, so unregister the listener.
         Hub.getInstance().removeListener(mListener);
 
