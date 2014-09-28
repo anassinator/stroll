@@ -1,5 +1,7 @@
 package com.myo.stroll;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Coordinates {
@@ -22,7 +24,8 @@ public class Coordinates {
 		double y = Math.sin(deltaLong) * Math.cos(lat2);
 		double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLong);
 		double result = Math.toDegrees(Math.atan2(y, x));
-		bearing = (result + 360.0) % 360.0;
+		bearing = (result + 360.0) % 360.0 - 180;
+		Log.w("debugger", String.valueOf(bearing) + "degrees");
 	}
 
 }

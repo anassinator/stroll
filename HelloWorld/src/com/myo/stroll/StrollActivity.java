@@ -55,7 +55,8 @@ public class StrollActivity extends Activity implements LocationListener{
     private LatLng current_location;
     private String current_pose;
     private Route route;
-
+    
+    Location location_variable;
     LocationManager locationManager ;
     String provider;
 
@@ -82,6 +83,7 @@ public class StrollActivity extends Activity implements LocationListener{
 	            Log.w("debugger", "Yay! Got directions");
 	            vibration.stop();
 	            route = new RequestHandler(directions).routes[0];
+	            onLocationChanged(location_variable);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -142,7 +144,7 @@ public class StrollActivity extends Activity implements LocationListener{
             mTextView.setRotationX(0);
             mTextView.setRotationY(0);
         	LocationHandler.update_orientation(rotation);
-        	String rpy = String.format("R: %-3.0f\nP: %-3.0f\nY: %-3.0f\n%s", roll, pitch, yaw, current_pose);
+        	String rpy = String.format("R: %-3.0f\nP: %-3.0f\nY: %-3.0f\n%s\n%-3.0f\n%3.2f\n%3.2f", roll, pitch, yaw, current_pose, Coordinates.bearing, current_location.longitude, current_location.latitude);
             mTextView.setText(rpy);
         }
 
@@ -152,8 +154,8 @@ public class StrollActivity extends Activity implements LocationListener{
             // Handle the cases of the Pose enumeration, and change the text of the text view
             // based on the pose we receive.
         	switch (pose) {
-        		case FIST:
-        			current_pose = "FIST";
+        		case WAVE_OUT:
+        			current_pose = "WAVE OUT";
         			LocationHandler.search(true);
         			break;
         		case UNKNOWN:
@@ -162,20 +164,24 @@ public class StrollActivity extends Activity implements LocationListener{
         			break;       			
         		case REST:
         			current_pose = "REST";
-        			LocationHandler.search(false);
+        			LocationHandler.search(true);
         			break;     
         		case THUMB_TO_PINKY:
-        			current_pose = "THUMB PINKY <3";
+        			current_pose = "PINKY";
         			LocationHandler.search(false);
         			break;     
         		case WAVE_IN:
         			current_pose = "WAVE IN";
         			LocationHandler.search(false);
         			break;     
-        		case WAVE_OUT:
-        			current_pose = "WAVE OUT";
+        		case FIST:
+        			current_pose = "FIST";
         			LocationHandler.search(false);
-        			break;     
+        			break;
+        		case FINGERS_SPREAD:
+        			current_pose = "FINGERS";
+        			LocationHandler.search(false);
+        			break;
         		default:
         	}
         }
@@ -194,7 +200,7 @@ public class StrollActivity extends Activity implements LocationListener{
         	 
             // Get the location from the given provider
             Location location = locationManager.getLastKnownLocation(provider);
- 
+            location_variable = location;
             locationManager.requestLocationUpdates(provider, 20000, 1, this);
  
             if(location!=null)
@@ -282,6 +288,7 @@ public class StrollActivity extends Activity implements LocationListener{
     
     @Override
     public void onLocationChanged(Location location) {
+    	Log.w("debugger", "you moved");
     	longitude = location.getLongitude();
     	latitude = location.getLatitude();
     	current_location = new LatLng(longitude, latitude);

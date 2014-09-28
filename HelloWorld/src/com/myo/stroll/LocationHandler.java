@@ -26,6 +26,7 @@ public class LocationHandler {
 	}
 
 	public static Boolean update_location(LatLng here, LatLng there) {
+		Log.w("debugger", "coordinates updated");
 		Coordinates.update(here, there);
 
 //		if (Coordinates.distance <= CLOSE_ENOUGH) {
@@ -38,7 +39,7 @@ public class LocationHandler {
 	}
 
     public static void notify(Vibration vibration) {
-    	long ms = 100 + (int) (10 * (Math.abs(LocationHandler.yaw - Coordinates.bearing) % 360));
+    	long ms = 100 + (int) (10 * ((Math.abs(LocationHandler.yaw - Coordinates.bearing) + 360) % 360));
     	Log.w("debugger", String.valueOf(ms) + "ms");
     	vibration.setPeriod(ms);
 	}
