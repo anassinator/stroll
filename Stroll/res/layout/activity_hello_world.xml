@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#33b5e5"
+    android:textAlignment="center"
     android:windowActionBar="false"
     tools:context="com.myo.stroll.StrollActivity"
     tools:ignore="MergeRootFrame" >
@@ -157,14 +158,18 @@
                 android:id="@+id/tableRow4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" >
+                android:layout_gravity="center"
+                android:textAlignment="gravity" >
 
                 <TextView
                     android:id="@+id/destination_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
+                    android:maxWidth="240dp"
                     android:text="Destination"
+                    android:textAlignment="center"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
             </TableRow>
