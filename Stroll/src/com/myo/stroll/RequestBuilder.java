@@ -2,6 +2,8 @@ package com.myo.stroll;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.json.JSONObject;
 
@@ -25,11 +27,13 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
     private static final String KEY = "key=";
     private static final String DEPARTURE_TIME = "departure_time=";
     private static final String MODE = "mode=";
+    private static final String REGION = "region=";
     // Value of api parameters
     private static final String UNITS = "units";
     private static final String METRIC = "metric";
     private static final String ALTROUTE = "alternatives";
     private static final String TRUE = "true";
+    private static final String CA = "ca";
     private static final String WALK = "walking";
     private static final String API_KEY = "AIzaSyA3bq0V_IMiwMGL4MR3M-1LmdbVB8kB-0k";
     
@@ -97,6 +101,7 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
                 + RequestBuilder.KEY + RequestBuilder.API_KEY + "&"
                 + RequestBuilder.ALTROUTE + RequestBuilder.TRUE + "&"
                 + RequestBuilder.UNITS + RequestBuilder.METRIC + "&"
+                + RequestBuilder.REGION + RequestBuilder.CA + "&"
                 + RequestBuilder.DEPARTURE_TIME + RequestBuilder.getCurrentTime() + "&"
                 + RequestBuilder.MODE + RequestBuilder.WALK;
     }
@@ -104,12 +109,18 @@ public class RequestBuilder extends AsyncTask<String, Void, JSONObject> {
     @Override
     protected JSONObject doInBackground(String... place) {
     	
-        if (place.length != 2)
-            return null;
+        if (place.length == 2) {
+            Log.w("debugger", "Starting...");
+            // place[0] - origin
+            // place[1] - destination
+            try {
+    			return this.getDirections(URLEncoder.encode(place[0], "UTF-8"), URLEncoder.encode(place[1], "UTF-8"));
+    		} catch (UnsupportedEncodingException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}	
+        }
         
-        Log.w("debugger", "Starting...");
-        // place[0] - origin
-        // place[1] - destination
-        return this.getDirections(place[0], place[1]);
+        return null;
     }
 }
